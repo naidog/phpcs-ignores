@@ -7,7 +7,7 @@ use PHP_CodeSniffer;
 
 final class Ignores
 {
-	private static self|NULL $instance = NULL;
+	private static ?self $instance = NULL;
 
 	/** @var list<string> */
 	private array $configFiles = [];
@@ -45,7 +45,7 @@ final class Ignores
 					assert(is_array($ignoreError) && is_string($ignoreError['path']) && is_string($ignoreError['sniff']) && is_string($ignoreError['message']) && is_string($ignoreError['count']));
 
 					$path = $ignoreError['path'];
-					if (!str_starts_with($path, '/')) {
+					if (strpos($path, '/') !== 0) {
 						$path = self::getAbsolutePath($configFileDir . '/' . $path);
 					}
 
@@ -118,7 +118,7 @@ final class Ignores
 	}
 
 
-	public function setInstance(): static
+	public function setInstance(): self
 	{
 		if (self::$instance !== NULL) {
 			throw new \RuntimeException('Instance can be set just once.');

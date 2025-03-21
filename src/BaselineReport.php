@@ -43,7 +43,7 @@ final class BaselineReport implements Report
 		$filename = $report['filename'];
 
 		// use relative path to current working directory
-		if (str_starts_with($filename, $this->cwd)) {
+		if (strpos($filename, $this->cwd) === 0) {
 			$filename = substr($filename, $this->cwdLength + 1);
 		}
 

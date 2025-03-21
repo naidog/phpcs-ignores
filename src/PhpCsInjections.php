@@ -22,9 +22,10 @@ final class PhpCsInjections
 	public static function register(): void
 	{
 		self::setInjections([static function (string $path, string $code): string {
-			if (str_ends_with($path, 'vendor/squizlabs/php_codesniffer/src/Files/FileList.php')) {
+            $fileListPath = 'vendor/squizlabs/php_codesniffer/src/Files/FileList.php';
+			if (substr($path, -strlen($fileListPath)) === $fileListPath) {
 				// already patched (why?)
-				if (str_contains($code, File::class)) {
+				if (strpos($code, File::class) !== FALSE) {
 					if (PHP_CODESNIFFER_VERBOSITY > 0) {
 						echo sprintf('File \'%s\' is already patched', $path) . PHP_EOL;
 					}
@@ -34,7 +35,7 @@ final class PhpCsInjections
 				$search = 'new LocalFile(';
 
 				// can't find where to put patch (new PHPCS version?)
-				if (!str_contains($code, $search)) {
+				if (strpos($code, $search) === FALSE) {
 					if (PHP_CODESNIFFER_VERBOSITY > 0) {
 						echo sprintf('Can\'t find \'%s\' in file \'%s\'. Patch can\'t be applied', $search, $path) . PHP_EOL;
 					}
@@ -179,7 +180,7 @@ final class PhpCsInjections
 	}
 
 
-	public function stream_open(string $path, string $mode, int $options, string|NULL &$openedPath): bool
+	public function stream_open(string $path, string $mode, int $options, ?string &$openedPath): bool
 	{
 		$usePath = (bool) ($options & STREAM_USE_PATH);
 		if (($mode === 'rb') && (pathinfo($path, PATHINFO_EXTENSION) === 'php')) {

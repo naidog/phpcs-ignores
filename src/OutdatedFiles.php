@@ -6,7 +6,7 @@ use PHP_CodeSniffer;
 
 final class OutdatedFiles
 {
-	private static self|NULL $instance = NULL;
+	private static ?self $instance = NULL;
 
 	private const WAIT_FOR_ALL_PROCESSES_SECONDS = 30;
 
@@ -16,7 +16,7 @@ final class OutdatedFiles
 
 	private int $parentPID;
 
-	private string|NULL $outdatedDataFile = NULL;
+	private ?string $outdatedDataFile = NULL;
 
 
 	public function __construct(Ignores $ignores, PHP_CodeSniffer\Config $config, string $outdatedVirtualFile)
@@ -111,7 +111,7 @@ final class OutdatedFiles
 						$remainingOutdatedErrors = array_intersect_key($json, $remainingOutdatedErrors);
 						break;
 					}
-				} catch (\JsonException) {
+				} catch (\JsonException $e) {
 					// do nothing - file can be corrupted, because is updating right now (for reading we're not using lock)
 				}
 
@@ -210,7 +210,7 @@ final class OutdatedFiles
 	/**
 	 * @return array<array<string, mixed>>|NULL
 	 */
-	private function loadOutdatedDataFile(): array|NULL
+	private function loadOutdatedDataFile(): ?array
 	{
 		if ($this->outdatedDataFile === NULL) {
 			throw new \RuntimeException('Property outdatedDataFile should not be NULL.');
@@ -251,7 +251,7 @@ final class OutdatedFiles
 	}
 
 
-	public function setInstance(): static
+	public function setInstance(): self
 	{
 		if (self::$instance !== NULL) {
 			throw new \RuntimeException('Instance can be set just once.');
@@ -263,7 +263,7 @@ final class OutdatedFiles
 	}
 
 
-	public static function getInstance(): self|NULL
+	public static function getInstance(): ?self
 	{
 		return self::$instance;
 	}
