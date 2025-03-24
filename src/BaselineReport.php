@@ -91,7 +91,7 @@ final class BaselineReport implements Report
 		$showSources = FALSE,
 		$width = 80,
 		$interactive = FALSE,
-		$toScreen = TRUE,
+		$toScreen = TRUE
 	): void
 	{
 		$json = '{"files":{' . rtrim($cachedData, ',') . '}}' . PHP_EOL;

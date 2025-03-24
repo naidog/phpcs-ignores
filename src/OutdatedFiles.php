@@ -230,7 +230,7 @@ final class OutdatedFiles
 		int $realCount,
 		int $expectedCount,
 		string $sniff,
-		string $message,
+		string $message
 	): string
 	{
 		if ($realCount === 0) {
